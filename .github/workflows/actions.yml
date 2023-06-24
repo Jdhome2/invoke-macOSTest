@@ -33,7 +33,7 @@ jobs:
         shell: pwsh
 
       - name: get atomic tests folder
-        run: git clone --filter=blob:none https://github.com/redcanaryco/atomic-red-team.git
+        run: git clone --depth 1 https://github.com/redcanaryco/atomic-red-team.git
 
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
