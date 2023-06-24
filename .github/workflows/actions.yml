@@ -21,7 +21,7 @@ jobs:
       - run: ls ~/.local/powershell/Modules
 
       - name: add to powershell profile
-        run: pwsh -c "New-Item -ItemType File -Path $PROFILE -Force"
+        run: pwsh -c "New-Item -ItemType File -Path ~/.config/powershell/Microsoft.PowerShell_profile.ps1 -Force"
       - run: echo "Import-Module ~/.local/powershell/Modules/invoke-atomicredteam/" > ~/.config/powershell/Microsoft.PowerShell_profile.ps1
       - run: ls ~/.local/powershell/Modules
       - run: ls ~/.config/powershell
