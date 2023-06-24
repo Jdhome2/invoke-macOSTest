@@ -12,7 +12,11 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-
+      - name: Cache atomic tests folder
+        uses: actions/cache@v3
+        with:
+          path: ./atomic-red-team
+          key: atomic-red-team-cache-${{ hashFiles('**/atomics/Indexes/index.yaml') }}
       - name: Install Powershell Core
         run: brew install --cask powershell
 
@@ -33,11 +37,6 @@ jobs:
         shell: pwsh
       - name: get atomic tests folder
         run: git clone https://github.com/redcanaryco/atomic-red-team.git --depth 1
-      - name: Cache atomic tests folder
-        uses: actions/cache@v3
-        with:
-          path: ./atomic-red-team
-          key: atomic-red-team-cache-${{ hashFiles('**/atomics/Indexes/index.yaml') }}
 
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
