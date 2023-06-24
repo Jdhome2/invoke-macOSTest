@@ -32,12 +32,12 @@ jobs:
         run: Get-Help Invoke-AtomicTest
         shell: pwsh
       - name: get atomic tests folder
-        run: git clone https://github.com/redcanaryco/atomic-red-team.git
+        run: git clone https://github.com/redcanaryco/atomic-red-team.git --depth 1
       - name: Cache atomic tests folder
         uses: actions/cache@v3
         with:
-          path: ~/atomic-red-team
-          key: atomic-red-team-cache-${{ hashFiles('**/atomic-redteam/**') }}
+          path: ./atomic-red-team
+          key: atomic-red-team-cache-${{ hashFiles('**/atomic-redteam/atomics/Indexes/index.yaml') }}
 
 
 
