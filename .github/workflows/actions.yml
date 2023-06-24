@@ -33,15 +33,20 @@ jobs:
         shell: pwsh
 
       - name: get atomic tests folder
-        run: git clone --filter=blob:none https://github.com/redcanaryco/atomic-red-team.git
+        run: git clone --filter=tree:0 https://github.com/redcanaryco/atomic-red-team.git
 
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
       - run: cat ~/.bash_history
       - run: Invoke-AtomicTest T1552.003-1 -CheckPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
+      - name: Eslogger start
+        run: ls
       - name: Run atomic test
         run: Invoke-AtomicTest T1552.003-1 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
+      - name: eslogger stop
+        run: ls
+
       - name: Logs
         run: cat ~/executionlog.json
