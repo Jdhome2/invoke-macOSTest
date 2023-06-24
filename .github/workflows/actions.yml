@@ -27,4 +27,9 @@ jobs:
       - run: ls ~/.config/powershell
       - run: cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
       - name: Test invoke atomic
-        run: pwsh -c "Get-Help Invoke-AtomicTest"
+        run: Get-Help Invoke-AtomicTest
+        shell: pwsh
+
+      - name: Run atomic test
+        run: pwsh Invoke-AtomicTest T1552.003-1
+        shell: pwsh
