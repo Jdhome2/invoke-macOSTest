@@ -33,5 +33,5 @@ jobs:
         shell: pwsh
 
       - name: Run atomic test
-        run: pwsh Invoke-AtomicTest T1552.003-1
+        run: Invoke-AtomicTest T1552.003-1
         shell: pwsh
