@@ -24,11 +24,10 @@ jobs:
       - name: add to powershell profile
         run: New-Item -ItemType File -Path ~/.config/powershell/Microsoft.PowerShell_profile.ps1 -Force
         shell: pwsh
-      - run: | 
-        echo "Import-Module ~/.local/powershell/Modules/invoke-atomicredteam/" > ~/.config/powershell/Microsoft.PowerShell_profile.ps1
-        ls ~/.local/powershell/Modules
-        ls ~/.config/powershell
-        cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+      - run: echo "Import-Module ~/.local/powershell/Modules/invoke-atomicredteam/" > ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+      - run: ls ~/.local/powershell/Modules
+      - run: ls ~/.config/powershell
+      - run: cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
       - name: Test invoke atomic
         run: Get-Help Invoke-AtomicTest
         shell: pwsh
@@ -37,9 +36,8 @@ jobs:
         run: git clone https://github.com/redcanaryco/atomic-red-team.git
 
       - name: create fake .bash_history
-        run: |
-        echo "password" >> ~/.bash_history
-        cat ~/.bash_history
+        run: echo "password" >> ~/.bash_history
+      - run: cat ~/.bash_history
       - run: Invoke-AtomicTest T1552.003-1 -CheckPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: Run atomic test
