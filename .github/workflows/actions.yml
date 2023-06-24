@@ -39,8 +39,6 @@ jobs:
           path: ./atomic-red-team
           key: atomic-red-team-cache-${{ hashFiles('**/atomic-redteam/atomics/Indexes/index.yaml') }}
 
-
-
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
       - run: cat ~/.bash_history
