@@ -5,9 +5,6 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: macos-13
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
@@ -15,10 +12,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
       - name: Install Powershell Core
         run: brew install --cask powershell
       - name: install Atomic red team
-        run: pwsh -c "Install-Module -Name invoke-atomicredteam,powershell-yaml -Scope CurrentUser -Force"
+        run: pwsh -c "IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);Install-AtomicRedTeam -InstallPath "~/.local/powershell/Modules""
       - name: Test invoke atomic
         run: pwsh -c "Get-Help Invoke-AtomicTest"
