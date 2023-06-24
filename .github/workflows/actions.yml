@@ -12,9 +12,20 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+
       - name: Install Powershell Core
         run: brew install --cask powershell
+
       - name: install Atomic red team
         run: pwsh -c "IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);Install-AtomicRedTeam -InstallPath "~/.local/powershell/Modules""
+        run: ls ~/.local/powershell/Modules
+
+      - name: add to powershell profile
+        run: pwsh -c "New-Item -ItemType File -Path $PROFILE -Force"
+        run: echo "Import-Module ~/.local/powershell/Modules/invoke-atomicredteam/" > ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+
       - name: Test invoke atomic
+        run: ls ~/.local/powershell/Modules
+        run: ls ~/.config/powershell
+        run: cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
         run: pwsh -c "Get-Help Invoke-AtomicTest"
