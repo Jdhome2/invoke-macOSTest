@@ -37,7 +37,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/atomic-red-team
-          key: atomic-red-team-cache-${{ hashFiles('atomic-redteam/**') }}
+          key: atomic-red-team-cache-${{ hashFiles('**/atomic-redteam/**') }}
 
 
 
