@@ -36,7 +36,8 @@ jobs:
         run: Get-Help Invoke-AtomicTest
         shell: pwsh
       - name: get atomic tests folder
-        run: git clone https://github.com/redcanaryco/atomic-red-team.git --depth 1
+        run: if [ ! -d ./atomic-red-team ]; then git clone https://github.com/redcanaryco/atomic-red-team.git --depth 1; else echo "Repo already present"; fi
+        
 
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
