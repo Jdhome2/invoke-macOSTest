@@ -40,20 +40,25 @@ jobs:
       - run: cat ~/.bash_history
       - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
+      - name: start eslogger
+        run: sudo eslogger exec mmap fork > test.json &
       - name: Run atomic test
         run: Invoke-AtomicTest T1539-3 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
       - name: eslogger stop
-        run: csrutil status
+        run: sudo pkill eslogger
 
       - name: test jq
         run: jq
 
-      - name: Logs
+      - name: Execution log
         run: cat ~/executionlog.json
+      - name: eslogger
+        run: cat test.json
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Atomic red team Execution log
           path: |
             ~/executionlog.json
+            ~/test.json
