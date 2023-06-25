@@ -38,7 +38,7 @@ jobs:
       - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: start eslogger
-        run: sudo eslogger exec mmap fork > test.json &
+        run: sudo eslogger exec mmap fork > ~/test.json &
       - name: Run atomic test
         run: Invoke-AtomicTest T1539-3 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
