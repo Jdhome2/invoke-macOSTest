@@ -51,7 +51,7 @@ jobs:
       - name: Execution log
         run: cat ~/executionlog.json
       - name: eslogger
-        run: cat test.json
+        run: cat ~/test.json
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
