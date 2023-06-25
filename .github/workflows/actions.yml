@@ -13,9 +13,6 @@ jobs:
         run: |
           ls ${{ github.workspace }}
 
-      - name: Install Powershell Core
-        run: brew install --cask powershell
-
       - name: install Atomic red team
         run: IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);Install-AtomicRedTeam -InstallPath "~/.local/powershell/Modules"
         shell: pwsh
