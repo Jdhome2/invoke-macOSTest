@@ -38,10 +38,10 @@ jobs:
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
       - run: cat ~/.bash_history
-      - run: Invoke-AtomicTest T1552.003-1 -CheckPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
+      - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: Run atomic test
-        run: Invoke-AtomicTest T1552.003-1 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
+        run: Invoke-AtomicTest T1539-3 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
       - name: eslogger stop
         run: csrutil status
