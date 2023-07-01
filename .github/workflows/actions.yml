@@ -45,9 +45,6 @@ jobs:
       - name: eslogger stop
         run: sudo pkill eslogger
 
-      - name: test jq
-        run: jq
-
       - name: Execution log
         run: cat ~/executionlog.json
       - name: eslogger
