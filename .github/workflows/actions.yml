@@ -7,22 +7,15 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
 
       - name: install Atomic red team
         run: IEX (IWR 'https://raw.githubusercontent.com/redcanaryco/invoke-atomicredteam/master/install-atomicredteam.ps1' -UseBasicParsing);Install-AtomicRedTeam -InstallPath "~/.local/powershell/Modules"
         shell: pwsh
-      - run: ls ~/.local/powershell/Modules
 
       - name: add to powershell profile
         run: New-Item -ItemType File -Path ~/.config/powershell/Microsoft.PowerShell_profile.ps1 -Force
         shell: pwsh
       - run: echo "Import-Module ~/.local/powershell/Modules/invoke-atomicredteam/" > ~/.config/powershell/Microsoft.PowerShell_profile.ps1
-      - run: ls ~/.local/powershell/Modules
-      - run: ls ~/.config/powershell
-      - run: cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
       - name: Test invoke atomic
         run: Get-Help Invoke-AtomicTest
         shell: pwsh
@@ -32,11 +25,10 @@ jobs:
 
       - name: create fake .bash_history
         run: echo "password" >> ~/.bash_history
-      - run: cat ~/.bash_history
       - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: start eslogger
-        run: sudo eslogger exec mmap fork > ~/test.json &
+        run: sudo eslogger exec mmap fork > ~/eslogger.json &
       - name: Run atomic test
         run: Invoke-AtomicTest T1539-3 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
@@ -45,12 +37,11 @@ jobs:
 
       - name: Execution log
         run: cat ~/executionlog.json
-      - name: eslogger
-        run: cat ~/test.json
+
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Atomic red team Execution log
           path: |
             ~/executionlog.json
-            ~/test.json
+            ~/eslogger.json
