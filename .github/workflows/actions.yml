@@ -23,8 +23,6 @@ jobs:
       - name: get atomic tests folder
         run: git clone --filter=tree:0 -b T1539-macOS https://github.com/jonod8698/atomic-red-team.git
 
-      - name: create fake .bash_history
-        run: echo "password" >> ~/.bash_history
       - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: start eslogger
