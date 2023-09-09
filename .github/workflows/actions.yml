@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is running a atomic red team test
 on: [push]
 jobs:
   Atomic-Red-Team-Run:
-    runs-on: self-hosted
+    runs-on: macos-13
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
