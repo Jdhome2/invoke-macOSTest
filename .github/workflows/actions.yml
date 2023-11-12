@@ -17,9 +17,6 @@ jobs:
           ls ~/.config/powershell
           cat ~/.config/powershell/Microsoft.PowerShell_profile.ps1
         shell: pwsh
-      - name: Test invoke atomic
-        run: Get-Help Invoke-AtomicTest
-        shell: pwsh
 
       - name: get atomic tests folder
         run: git clone --filter=tree:0 https://github.com/redcanaryco/atomic-red-team.git
