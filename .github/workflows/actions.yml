@@ -22,14 +22,14 @@ jobs:
         shell: pwsh
 
       - name: get atomic tests folder
-        run: git clone --filter=tree:0 -b T1539-macOS https://github.com/jonod8698/atomic-red-team.git
+        run: git clone --filter=tree:0 https://github.com/redcanaryco/atomic-red-team.git
 
-      - run: Invoke-AtomicTest T1539-3 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
+      - run: Invoke-AtomicTest T1569.001-1 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: start eslogger
         run: sudo eslogger exec mmap fork > ~/eslogger.json &
       - name: Run atomic test
-        run: Invoke-AtomicTest T1539-3 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
+        run: Invoke-AtomicTest T1569.001-1 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
       - name: eslogger stop
         run: sudo pkill eslogger
