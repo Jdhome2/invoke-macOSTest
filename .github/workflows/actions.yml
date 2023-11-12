@@ -5,8 +5,8 @@ jobs:
   Atomic-Red-Team-Run:
     strategy:
       matrix:
-        os: [tartelet]
-    runs-on: ${{ matrix.os }}
+        ttp: [T1569.001-1, T1564.002, T1048]
+    runs-on: tartelet
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -27,12 +27,12 @@ jobs:
       - name: get atomic tests folder
         run: git clone --filter=tree:0 https://github.com/redcanaryco/atomic-red-team.git
 
-      - run: Invoke-AtomicTest T1569.001-1 -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
+      - run: Invoke-AtomicTest ${{ matrix.ttp }} -GetPrereqs -PathToAtomicsFolder "./atomic-red-team/atomics"
         shell: pwsh
       - name: start eslogger
         run: sudo eslogger exec mmap fork > ~/eslogger.json &
       - name: Run atomic test
-        run: Invoke-AtomicTest T1569.001-1 -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
+        run: Invoke-AtomicTest ${{ matrix.ttp }} -PathToAtomicsFolder "./atomic-red-team/atomics" -ExecutionLogPath "~/executionlog.json" -LoggingModule "Attire-ExecutionLogger" -TimeoutSeconds 60; return $true
         shell: pwsh
       - name: eslogger stop
         run: sudo pkill eslogger
