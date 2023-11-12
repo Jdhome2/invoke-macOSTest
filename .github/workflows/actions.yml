@@ -5,7 +5,7 @@ jobs:
   Atomic-Red-Team-Run:
     strategy:
       matrix:
-        os: [tartlet]
+        os: [tartelet]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository code
