@@ -3,7 +3,10 @@ run-name: ${{ github.actor }} is running a atomic red team test
 on: [push]
 jobs:
   Atomic-Red-Team-Run:
-    runs-on: macos-13
+    strategy:
+      matrix:
+        os: [macos-12, macos-13, macos-11]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
