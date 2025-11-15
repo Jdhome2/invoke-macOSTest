@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # GitHub Actions dependency updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "security"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Automatically update actions to latest SHA
+    reviewers:
+      - "security-team"
+    open-pull-requests-limit: 10
+    # Group all GitHub Actions updates into a single PR
+    groups:
+      github-actions:
+        patterns:
+          - "*"

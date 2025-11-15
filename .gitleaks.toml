@@ -1,0 +1,76 @@
+# Gitleaks Configuration
+# Customized secret detection rules for Atomic Red Team workflow
+
+title = "Gitleaks Configuration for Atomic Red Team"
+
+[extend]
+# Use default gitleaks rules as baseline
+useDefault = true
+
+[[rules]]
+id = "github-pat"
+description = "GitHub Personal Access Token"
+regex = '''ghp_[0-9a-zA-Z]{36}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "github-oauth"
+description = "GitHub OAuth Access Token"
+regex = '''gho_[0-9a-zA-Z]{36}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "github-app-token"
+description = "GitHub App Token"
+regex = '''(ghu|ghs)_[0-9a-zA-Z]{36}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "github-refresh-token"
+description = "GitHub Refresh Token"
+regex = '''ghr_[0-9a-zA-Z]{36}'''
+tags = ["key", "github"]
+
+[[rules]]
+id = "aws-access-key"
+description = "AWS Access Key"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["key", "aws"]
+
+[[rules]]
+id = "slack-token"
+description = "Slack Token"
+regex = '''xox[baprs]-([0-9a-zA-Z]{10,48})'''
+tags = ["key", "slack"]
+
+[[rules]]
+id = "private-key"
+description = "Private Key"
+regex = '''-----BEGIN[ A-Z]*PRIVATE KEY-----'''
+tags = ["key", "private"]
+
+[[rules]]
+id = "generic-api-key"
+description = "Generic API Key"
+regex = '''(?i)(api[_-]?key|apikey)['"\s]*[:=]['"\s]*([0-9a-zA-Z\-_]{20,})'''
+tags = ["key", "api"]
+
+[allowlist]
+description = "Allowlist for false positives"
+paths = [
+    # Documentation files may contain example patterns
+    '''\.md$''',
+    '''SECURITY\.md$''',
+    # Test files may contain dummy secrets
+    '''test_.*''',
+]
+
+regexes = [
+    # Example/placeholder secrets
+    '''EXAMPLE_.*''',
+    '''YOUR_.*_HERE''',
+    '''<YOUR_.*>''',
+    # Redacted patterns from sanitization
+    '''REDACTED''',
+    '''XXX\.XXX''',
+]

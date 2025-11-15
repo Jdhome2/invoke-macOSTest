@@ -1,0 +1,106 @@
+name: Security Checks
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+  schedule:
+    # Run security scans daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+# Minimum required permissions
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@0c155c5e8556a497adf53f2c18edabf945ed8e70 # v4.0.0
+        with:
+          fail-on-severity: moderate
+
+  secret-scanning:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0  # Full history for comprehensive scanning
+
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@cb7149a9c00a561c9e0cec5d963f9dda9c8e9e22 # v2.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  workflow-security:
+    name: Workflow Security Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Validate Workflow Files
+        run: |
+          # Check for unpinned actions
+          echo "Checking for unpinned GitHub Actions..."
+          if grep -r "uses:.*@v[0-9]" .github/workflows/; then
+            echo "ERROR: Found unpinned actions using version tags instead of SHA commits"
+            exit 1
+          fi
+
+          # Check for hardcoded secrets
+          echo "Checking for potential hardcoded secrets..."
+          if grep -ri "password\|secret\|token\|api[_-]key" .github/workflows/ | grep -v "secrets."; then
+            echo "WARNING: Found potential hardcoded secrets"
+            exit 1
+          fi
+
+          # Check for command injection risks
+          echo "Checking for command injection risks..."
+          if grep -r '\${{' .github/workflows/ | grep -E 'run:|script:' | grep -v 'secrets.'; then
+            echo "WARNING: Found potential command injection vectors - review manual validation"
+          fi
+
+      - name: ActionLint
+        uses: reviewdog/action-actionlint@7eeec1dd160c2301eb28e1568721837d084558ad # v1.39.1
+        with:
+          actionlint_flags: -color
+
+  security-scorecard:
+    name: OpenSSF Scorecard
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      id-token: write
+      contents: read
+      actions: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          persist-credentials: false
+
+      - name: Run analysis
+        uses: ossf/scorecard-action@0864cf19026789058feabb7e87baa5f140aac736 # v2.3.1
+        with:
+          results_file: results.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@e8893c57a1f3a2b659b6b55564fdfdbbd2982911 # v3.24.0
+        with:
+          sarif_file: results.sarif

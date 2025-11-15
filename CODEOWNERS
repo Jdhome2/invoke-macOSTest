@@ -1,0 +1,19 @@
+# CODEOWNERS - Define individuals or teams responsible for code in this repository
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+# Adjust these to actual GitHub usernames or team names
+* @security-team @red-team-leads
+
+# GitHub Actions workflows require security team review
+/.github/workflows/ @security-team @devops-team
+
+# Security-critical scripts require dual approval
+/scripts/ @security-team
+
+# Security policy and documentation
+/SECURITY.md @security-team
+/README.md @security-team @red-team-leads
+
+# Atomic test configurations require red team approval
+/atomics.txt @red-team-leads
